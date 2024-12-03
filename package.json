@@ -12,8 +12,12 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+<<<<<<< HEAD
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "echo 'Tests disabled'"
+=======
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
+>>>>>>> 3f7fb55 (Initial commit)
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.2",
@@ -30,7 +34,10 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
+<<<<<<< HEAD
     "@types/stripe": "^8.0.417",
+=======
+>>>>>>> 3f7fb55 (Initial commit)
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
@@ -42,18 +49,27 @@
     "mssql": "^10.0.4",
     "mysql": "^2.18.1",
     "mysql2": "^3.9.7",
+<<<<<<< HEAD
     "nest-puppeteer": "^1.1.1",
+=======
+>>>>>>> 3f7fb55 (Initial commit)
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "pg": "^8.11.5",
+<<<<<<< HEAD
     "puppeteer": "^22.9.0",
     "puppeteer-core": "^22.10.0",
+=======
+>>>>>>> 3f7fb55 (Initial commit)
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
     "save": "^2.9.0",
     "save-dev": "^0.0.1-security",
+<<<<<<< HEAD
     "stripe": "^15.8.0",
+=======
+>>>>>>> 3f7fb55 (Initial commit)
     "swagger-ui-express": "^5.0.1",
     "typeorm": "^0.3.20"
   },
