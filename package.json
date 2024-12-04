@@ -30,7 +30,6 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
-    "@types/stripe": "^8.0.417",
     "axios": "^1.6.8",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
