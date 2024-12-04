@@ -100,10 +100,10 @@ export class UsersController {
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Récupérer un utilisateur par son ID' })
+  @ApiOperation({ summary: 'Récupérer un utilisateur par son pseudo' })
   @ApiParam({
-    name: 'id',
-    description: 'ID de l’utilisateur à récupérer',
+    name: 'Pseudo',
+    description: 'Pseudo de l’utilisateur à récupérer',
     type: String
   })
   @ApiResponse({ status: 200, description: 'Utilisateur trouvé.' })

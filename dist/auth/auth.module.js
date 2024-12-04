@@ -16,6 +16,9 @@ const jwt_strategy_1 = require("./strategies/jwt.strategy");
 const users_module_1 = require("../users/users.module");
 const local_auth_guard_1 = require("./guards/local-auth.guard");
 const local_strategy_1 = require("./strategies/local.strategy");
+const typeorm_1 = require("@nestjs/typeorm");
+const token_entity_1 = require("./entities/token.entity");
+const token_service_1 = require("./token.service");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -24,12 +27,13 @@ exports.AuthModule = AuthModule = __decorate([
         imports: [
             users_module_1.UsersModule,
             passport_1.PassportModule,
+            typeorm_1.TypeOrmModule.forFeature([token_entity_1.Token]),
             jwt_1.JwtModule.register({
                 secret: process.env.JWT_SECRET,
-                signOptions: { expiresIn: '60m' },
+                signOptions: { expiresIn: '1h' },
             }),
         ],
-        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, local_strategy_1.LocalStrategy, local_auth_guard_1.LocalAuthGuard],
+        providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, local_strategy_1.LocalStrategy, local_auth_guard_1.LocalAuthGuard, token_service_1.TokenService],
         controllers: [auth_controller_1.AuthController],
     })
 ], AuthModule);

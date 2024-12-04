@@ -1,4 +1,5 @@
 import { Publication } from '../../posts/entities/post.entity';
+import { Token } from 'src/auth/entities/token.entity';
 export declare class User {
     id: number;
     name: string;
@@ -9,4 +10,5 @@ export declare class User {
     description: string;
     profilPublic: boolean;
     publication: Publication[];
+    tokens: Token[];
 }

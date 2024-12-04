@@ -23,8 +23,15 @@ let PostController = class PostController {
     constructor(postService) {
         this.postService = postService;
     }
-    async create(createPostDto) {
-        return await this.postService.create(createPostDto);
+    async create(createPostDto, file) {
+        let fileUrl = null;
+        if (file) {
+        }
+        const publication = await this.postService.create({
+            ...createPostDto,
+            fileUrl
+        });
+        return publication;
     }
     async findAll() {
         return await this.postService.findAll();
@@ -75,8 +82,9 @@ __decorate([
     }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Requête invalide.' }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "create", null);
 __decorate([

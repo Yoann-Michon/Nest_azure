@@ -5,7 +5,7 @@ import { CreatePostDto } from './dto/create-post.dto';
 export declare class PostController {
     private readonly postService;
     constructor(postService: PostService);
-    create(createPostDto: CreatePostDto): Promise<Publication>;
+    create(createPostDto: CreatePostDto, file: Express.Multer.File): Promise<Publication>;
     findAll(): Promise<Publication[]>;
     update(id: number, updateBlogDto: UpdatePostDto): Promise<Publication>;
     remove(id: string): Promise<void>;

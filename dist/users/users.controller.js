@@ -126,10 +126,10 @@ __decorate([
 ], UsersController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Récupérer un utilisateur par son ID' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Récupérer un utilisateur par son pseudo' }),
     (0, swagger_1.ApiParam)({
-        name: 'id',
-        description: 'ID de l’utilisateur à récupérer',
+        name: 'Pseudo',
+        description: 'Pseudo de l’utilisateur à récupérer',
         type: String
     }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Utilisateur trouvé.' }),

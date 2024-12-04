@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UploadedFile } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiParam } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { Publication } from './entities/post.entity';
@@ -8,14 +8,17 @@ import { CreatePostDto } from './dto/create-post.dto';
 @ApiTags('Posts')
 @Controller('api/posts')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(private readonly postService: PostService, 
+    //private readonly blobService: BlobService
+
+  ) {}
 
   @Post()
   @ApiOperation({ summary: 'Créer une nouvelle publication' })
   @ApiBody({ 
     type: CreatePostDto,
     examples: {
-      'application/json': {
+      'application/json': { 
         summary: 'Exemple de création d’une publication',
         value: {
           title: 'Titre de la publication',
@@ -46,8 +49,19 @@ export class PostController {
     }
   })
   @ApiResponse({ status: 400, description: 'Requête invalide.' }) 
-  async create(@Body() createPostDto: CreatePostDto): Promise<Publication> {
-    return await this.postService.create(createPostDto);
+  async create(@Body() createPostDto: CreatePostDto, @UploadedFile() file: Express.Multer.File): Promise<Publication> {
+    let fileUrl: string | null = null;
+
+    if (file) {
+      //fileUrl = await this.blobService.uploadFile(file);
+    }
+
+    const publication = await this.postService.create({
+      ...createPostDto,
+      fileUrl
+    });
+
+    return publication;
   }
 
   @Get()

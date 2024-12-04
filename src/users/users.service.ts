@@ -7,12 +7,13 @@ import { CreateUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
+  [x: string]: any;
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
   ) {}
 
-  async findOne(username: string): Promise<User | undefined> {
+  async findOne(username: string): Promise<User> {
     return this.usersRepository.findOne({ where: { username } });
   }
 

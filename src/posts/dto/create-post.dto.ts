@@ -9,11 +9,7 @@ export class CreatePostDto {
   @IsNotEmpty()
   content: string;
 
-  @IsInt()
-  @IsNotEmpty()
-  userId: number;
-
-  @IsUrl()
+  @IsString()
   @IsOptional()
   fileUrl?: string;
 }

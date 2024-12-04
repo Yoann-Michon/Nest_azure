@@ -13,8 +13,6 @@ const app_service_1 = require("./app.service");
 const post_module_1 = require("./posts/post.module");
 const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
-const auth_service_1 = require("./auth/auth.service");
-const auth_controller_1 = require("./auth/auth.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
 const jwt_1 = require("@nestjs/jwt");
@@ -52,8 +50,8 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
             }),
         ],
-        controllers: [app_controller_1.AppController, auth_controller_1.AuthController],
-        providers: [app_service_1.AppService, auth_service_1.AuthService],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map
