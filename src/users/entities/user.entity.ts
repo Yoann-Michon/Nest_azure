@@ -22,10 +22,10 @@ export class User {
   @Column()
   age: number;
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', default:"No description"})
   description: string;
 
-  @Column({ default: true })
+  @Column({ default: true , select: false})
   profilPublic: boolean;
 
   @OneToMany(() => Publication, (publication) => publication.user)

@@ -42,7 +42,8 @@ let UsersService = class UsersService {
         if (!user) {
             throw new common_1.NotFoundException(`User with ID ${id} not found`);
         }
-        return await this.usersRepository.save(user);
+        const updatedUser = { ...user, ...userDto };
+        return await this.usersRepository.save(updatedUser);
     }
     async remove(id) {
         const user = await this.usersRepository.findOneBy({ id });

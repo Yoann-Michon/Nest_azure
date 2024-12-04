@@ -8,6 +8,6 @@ export declare class PostService {
     create(createPostDto: CreatePostDto): Promise<Publication>;
     findAll(): Promise<Publication[]>;
     findOne(id: number): Promise<Publication>;
-    update(id: number, updateBlogDto: UpdatePostDto): Promise<Publication>;
+    update(id: number, updateBlogDto: Partial<UpdatePostDto>): Promise<Publication>;
     remove(id: number): Promise<void>;
 }

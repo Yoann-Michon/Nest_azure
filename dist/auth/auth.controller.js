@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const local_auth_guard_1 = require("./guards/local-auth.guard");
 const create_user_dto_1 = require("../users/dto/create-user.dto");
+const swagger_1 = require("@nestjs/swagger");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -25,21 +26,61 @@ let AuthController = class AuthController {
         return this.authService.login(req.user);
     }
     async register(createUserDto) {
-        const user = await this.authService.register(createUserDto);
-        const token = await this.authService.login(user);
-        return { user, token: token.access_token };
+        return await this.authService.register(createUserDto);
     }
 };
 exports.AuthController = AuthController;
 __decorate([
     (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
     (0, common_1.Post)('login'),
+    (0, swagger_1.ApiOperation)({ summary: 'User login' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Successful login',
+        schema: {
+            example: {
+                access_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
+            },
+        },
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid credentials' }),
+    (0, swagger_1.ApiBody)({
+        description: 'User credentials required for login',
+        schema: {
+            type: 'object',
+            properties: {
+                username: { type: 'string', example: 'johndoe' },
+                password: { type: 'string', example: 'password123' },
+            },
+        },
+    }),
     __param(0, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
+    (0, swagger_1.ApiOperation)({ summary: 'Register a new user' }),
+    (0, swagger_1.ApiResponse)({ status: 201, description: 'User successfully created.' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid data provided.' }),
+    (0, swagger_1.ApiBody)({
+        description: 'Data required to create a new user',
+        type: create_user_dto_1.CreateUserDto,
+        examples: {
+            'application/json': {
+                summary: 'Example of user registration',
+                value: {
+                    name: 'Doe',
+                    firstname: 'John',
+                    username: 'johndoe',
+                    password: 'password123',
+                    age: 25,
+                    description: 'Full-Stack Developer',
+                    profilPublic: true,
+                },
+            },
+        },
+    }),
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -47,7 +88,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 exports.AuthController = AuthController = __decorate([
-    (0, common_1.Controller)('auth'),
+    (0, swagger_1.ApiTags)('Authentification'),
+    (0, common_1.Controller)('api/auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
 ], AuthController);
 //# sourceMappingURL=auth.controller.js.map

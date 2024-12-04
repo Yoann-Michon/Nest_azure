@@ -20,26 +20,32 @@ export class PostService {
     return await this.postRepository.save(post);
   }
 
-  findAll() {
+  async findAll() {
     try {
-      return this.postRepository.find();
+      return await this.postRepository.find();
     } catch (error) {
       throw new ConflictException();
     }
   }
 
-  findOne(id: number) {
+  async findOne(id: number) {
     try {
-      return this.postRepository.findOne({ where: { id }, relations: ['user'] });
+      return await this.postRepository.findOne({ where: { id }, relations: ['user'] });
     } catch (error) {
       throw new ConflictException();
     }
   }
 
-  async update(id: number, updateBlogDto: UpdatePostDto) {
-    let done = await this.postRepository.update(id, updateBlogDto);
-    if (done.affected != 1) throw new NotFoundException(id);
-    return this.findOne(id);
+  async update(id: number, updateBlogDto: Partial<UpdatePostDto>):Promise<Publication>  {
+  const existingPost = await this.findOne(id);
+  if (!existingPost) {
+    throw new NotFoundException(`Post with ID ${id} not found.`);
+  }
+  const result = await this.postRepository.update(id, updateBlogDto);
+  if (result.affected !== 1) {
+    throw new NotFoundException(`Failed to update post with ID ${id}.`);
+  }
+  return this.findOne(id);
   }
 
   async remove(id: number) {

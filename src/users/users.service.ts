@@ -31,14 +31,15 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async update(id: number, userDto: CreateUserDto): Promise<User> {
+  async update(id: number, userDto: Partial<CreateUserDto>): Promise<User> {
     const user = await this.usersRepository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+    const updatedUser = { ...user, ...userDto };
 
-    return await this.usersRepository.save(user);
+    return await this.usersRepository.save(updatedUser);
   }
 
   async remove(id: number): Promise<{ message: string }> {

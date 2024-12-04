@@ -18,31 +18,31 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Créer un nouvel utilisateur' })
-  @ApiBody({ 
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiBody({
     type: CreateUserDto,
     examples: {
       'application/json': {
-        summary: 'Exemple de données pour la création d’un utilisateur',
+        summary: 'Example payload for user creation',
         value: {
           name: 'John',
           firstname: 'Doe',
           username: 'johndoe',
           password: 'password123',
           age: 30,
-          description: 'Développeur full-stack',
-          profilPublic: true
-        }
-      }
-    }
+          description: 'Full-stack developer',
+          profilPublic: true,
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 201,
-    description: 'Utilisateur créé avec succès.',
+    description: 'User successfully created.',
     type: User,
     examples: {
       'application/json': {
-        summary: 'Utilisateur créé avec succès',
+        summary: 'User successfully created',
         value: {
           id: 1,
           name: 'John',
@@ -50,26 +50,26 @@ export class UsersController {
           username: 'johndoe',
           password: 'hashedpassword',
           age: 30,
-          description: 'Développeur full-stack',
-          profilPublic: true
-        }
-      }
-    }
+          description: 'Full-stack developer',
+          profilPublic: true,
+        },
+      },
+    },
   })
-  @ApiResponse({ status: 400, description: 'Requête invalide.' })
+  @ApiResponse({ status: 400, description: 'Invalid request.' })
   async create(@Body() userDto: CreateUserDto): Promise<User> {
     return await this.usersService.create(userDto);
   }
 
   @Get()
-  @ApiOperation({ summary: 'Récupérer tous les utilisateurs' })
+  @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({
     status: 200,
-    description: 'Liste des utilisateurs récupérée avec succès.',
+    description: 'List of users successfully retrieved.',
     type: [User],
     examples: {
       'application/json': {
-        summary: 'Liste des utilisateurs',
+        summary: 'List of users',
         value: [
           {
             id: 1,
@@ -78,8 +78,8 @@ export class UsersController {
             username: 'johndoe',
             password: 'hashedpassword',
             age: 30,
-            description: 'Développeur full-stack',
-            profilPublic: true
+            description: 'Full-stack developer',
+            profilPublic: true,
           },
           {
             id: 2,
@@ -88,33 +88,51 @@ export class UsersController {
             username: 'janedoe',
             password: 'hashedpassword',
             age: 25,
-            description: 'Designer UI/UX',
-            profilPublic: false
-          }
-        ]
-      }
-    }
+            description: 'UI/UX designer',
+            profilPublic: false,
+          },
+        ],
+      },
+    },
   })
   async findAll() {
     return await this.usersService.findAll();
   }
 
   @Get(':id')
-  @ApiOperation({ summary: 'Récupérer un utilisateur par son pseudo' })
+  @ApiOperation({ summary: 'Retrieve a user by ID' })
   @ApiParam({
-    name: 'Pseudo',
-    description: 'Pseudo de l’utilisateur à récupérer',
-    type: String
+    name: 'id',
+    description: 'ID of the user to retrieve',
+    type: Number,
   })
-  @ApiResponse({ status: 200, description: 'Utilisateur trouvé.' })
-  @ApiResponse({ status: 404, description: 'Utilisateur non trouvé.' })
+  @ApiResponse({ status: 200, description: 'User found.',
+    type: [User],
+    examples: {
+      'application/json': {
+        summary: 'User',
+        value: [
+          {
+            id: 1,
+            name: 'John',
+            firstname: 'Doe',
+            username: 'johndoe',
+            age: 30,
+            description: 'Full-stack developer',
+            profilPublic: true,
+          },
+        ],
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'User not found.' })
   @ApiResponse({
     status: 200,
-    description: 'Utilisateur trouvé',
+    description: 'User found',
     type: User,
     examples: {
       'application/json': {
-        summary: 'Utilisateur trouvé',
+        summary: 'User found',
         value: {
           id: 1,
           name: 'John',
@@ -122,47 +140,47 @@ export class UsersController {
           username: 'johndoe',
           password: 'hashedpassword',
           age: 30,
-          description: 'Développeur full-stack',
-          profilPublic: true
-        }
-      }
-    }
+          description: 'Full-stack developer',
+          profilPublic: true,
+        },
+      },
+    },
   })
   async findOne(@Param('id') id: string) {
     return await this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  @ApiOperation({ summary: 'Mettre à jour un utilisateur' })
+  @ApiOperation({ summary: 'Update a user' })
   @ApiParam({
     name: 'id',
-    description: 'ID de l’utilisateur à mettre à jour',
-    type: Number
+    description: 'ID of the user to update',
+    type: Number,
   })
   @ApiBody({
     type: CreateUserDto,
     examples: {
       'application/json': {
-        summary: 'Exemple de données pour la mise à jour d’un utilisateur',
+        summary: 'Example payload for updating a user',
         value: {
           name: 'John',
           firstname: 'Doe',
           username: 'johndoeUpdated',
           password: 'newpassword123',
           age: 31,
-          description: 'Développeur full-stack expérimenté',
-          profilPublic: false
-        }
-      }
-    }
+          description: 'Experienced full-stack developer',
+          profilPublic: false,
+        },
+      },
+    },
   })
   @ApiResponse({
     status: 200,
-    description: 'Utilisateur mis à jour avec succès.',
+    description: 'User successfully updated.',
     type: User,
     examples: {
       'application/json': {
-        summary: 'Utilisateur mis à jour',
+        summary: 'User successfully updated',
         value: {
           id: 1,
           name: 'John',
@@ -170,29 +188,29 @@ export class UsersController {
           username: 'johndoeUpdated',
           password: 'hashedpassword',
           age: 31,
-          description: 'Développeur full-stack expérimenté',
-          profilPublic: false
-        }
-      }
-    }
+          description: 'Experienced full-stack developer',
+          profilPublic: false,
+        },
+      },
+    },
   })
-  @ApiResponse({ status: 404, description: 'Utilisateur non trouvé.' })
-  async update(@Param('id') id: string, @Body() userDto: CreateUserDto) {
+  @ApiResponse({ status: 404, description: 'User not found.' })
+  async update(@Param('id') id: string, @Body() userDto: Partial<CreateUserDto>) {
     return await this.usersService.update(+id, userDto);
   }
 
   @Delete(':id')
-  @ApiOperation({ summary: 'Supprimer un utilisateur' })
+  @ApiOperation({ summary: 'Delete a user' })
   @ApiParam({
     name: 'id',
-    description: 'ID de l’utilisateur à supprimer',
-    type: Number
+    description: 'ID of the user to delete',
+    type: Number,
   })
   @ApiResponse({
     status: 200,
-    description: 'Utilisateur supprimé avec succès.',
+    description: 'User successfully deleted.',
   })
-  @ApiResponse({ status: 404, description: 'Utilisateur non trouvé.' })
+  @ApiResponse({ status: 404, description: 'User not found.' })
   async remove(@Param('id') id: string) {
     return await this.usersService.remove(+id);
   }

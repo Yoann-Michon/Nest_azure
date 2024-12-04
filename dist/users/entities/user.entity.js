@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "description", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ default: true }),
+    (0, typeorm_1.Column)({ default: true, select: false }),
     __metadata("design:type", Boolean)
 ], User.prototype, "profilPublic", void 0);
 __decorate([

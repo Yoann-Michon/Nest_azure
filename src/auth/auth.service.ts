@@ -3,8 +3,6 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { User } from 'src/users/entities/user.entity';
-import { Repository } from 'typeorm';
-import { Token } from './entities/token.entity';
 import { TokenService } from './token.service';
 
 @Injectable()
@@ -24,13 +22,10 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.id, role: user.role };
+  async login(user: any):Promise<{ access_token: string }>{
+    const payload = { username: user.username, sub: user.id};
     const accessToken = this.jwtService.sign(payload);
-
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 1);
-    await this.tokenService.saveToken(accessToken, user);
+    await this.tokenService.saveToken(accessToken, user)
 
     return {
       access_token: accessToken,

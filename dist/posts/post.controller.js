@@ -19,19 +19,22 @@ const post_service_1 = require("./post.service");
 const post_entity_1 = require("./entities/post.entity");
 const update_post_dto_1 = require("./dto/update-post.dto");
 const create_post_dto_1 = require("./dto/create-post.dto");
+const blob_service_1 = require("../blob/blob.service");
+const platform_express_1 = require("@nestjs/platform-express");
 let PostController = class PostController {
-    constructor(postService) {
+    constructor(postService, blobService) {
         this.postService = postService;
+        this.blobService = blobService;
     }
     async create(createPostDto, file) {
         let fileUrl = null;
         if (file) {
+            fileUrl = await this.blobService.uploadFile(file);
         }
-        const publication = await this.postService.create({
+        return await this.postService.create({
             ...createPostDto,
-            fileUrl
+            fileUrl,
         });
-        return publication;
     }
     async findAll() {
         return await this.postService.findAll();
@@ -46,41 +49,52 @@ let PostController = class PostController {
 exports.PostController = PostController;
 __decorate([
     (0, common_1.Post)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Créer une nouvelle publication' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Create a new post' }),
+    (0, swagger_1.ApiConsumes)('multipart/form-data'),
     (0, swagger_1.ApiBody)({
-        type: create_post_dto_1.CreatePostDto,
+        schema: {
+            type: 'object',
+            properties: {
+                title: { type: 'string', maxLength: 255 },
+                content: { type: 'string' },
+                file: {
+                    type: 'string',
+                    format: 'binary',
+                    nullable: true,
+                },
+            },
+        },
         examples: {
-            'application/json': {
-                summary: 'Exemple de création d’une publication',
+            'multipart/form-data': {
+                summary: 'Example of file upload',
                 value: {
-                    title: 'Titre de la publication',
-                    content: 'Contenu de la publication',
-                    fileUrl: 'http://example.com/image.jpg',
-                    userId: 1
-                }
-            }
-        }
+                    title: 'Post title',
+                    content: 'Post content',
+                    file: '(Select a file here)',
+                },
+            },
+        },
     }),
     (0, swagger_1.ApiResponse)({
         status: 201,
-        description: 'Publication créée avec succès.',
+        description: 'Post successfully created.',
         type: post_entity_1.Publication,
         examples: {
             'application/json': {
-                summary: 'Publication créée',
+                summary: 'Created post',
                 value: {
                     id: 1,
-                    title: 'Titre de la publication',
-                    content: 'Contenu de la publication',
+                    title: 'Post title',
+                    content: 'Post content',
                     fileUrl: 'http://example.com/image.jpg',
-                    userId: 1,
                     createdAt: '2024-12-03T12:00:00',
-                    updatedAt: '2024-12-03T12:00:00'
-                }
-            }
-        }
+                    updatedAt: '2024-12-03T12:00:00',
+                },
+            },
+        },
     }),
-    (0, swagger_1.ApiResponse)({ status: 400, description: 'Requête invalide.' }),
+    (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid request.' }),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
@@ -89,36 +103,36 @@ __decorate([
 ], PostController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Récupérer toutes les publications' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Retrieve all posts' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Liste des publications récupérée avec succès.',
+        description: 'List of posts retrieved successfully.',
         type: [post_entity_1.Publication],
         examples: {
             'application/json': {
-                summary: 'Liste des publications',
+                summary: 'List of posts',
                 value: [
                     {
                         id: 1,
-                        title: 'Titre de la publication',
-                        content: 'Contenu de la publication',
+                        title: 'Post title',
+                        content: 'Post content',
                         fileUrl: 'http://example.com/image1.jpg',
                         userId: 1,
                         createdAt: '2024-12-03T12:00:00',
-                        updatedAt: '2024-12-03T12:00:00'
+                        updatedAt: '2024-12-03T12:00:00',
                     },
                     {
                         id: 2,
-                        title: 'Deuxième publication',
-                        content: 'Contenu de la deuxième publication',
+                        title: 'Second post',
+                        content: 'Second post content',
                         fileUrl: 'http://example.com/image2.jpg',
                         userId: 2,
                         createdAt: '2024-12-03T13:00:00',
-                        updatedAt: '2024-12-03T13:00:00'
-                    }
-                ]
-            }
-        }
+                        updatedAt: '2024-12-03T13:00:00',
+                    },
+                ],
+            },
+        },
     }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
@@ -126,55 +140,64 @@ __decorate([
 ], PostController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Mettre à jour une publication' }),
-    (0, swagger_1.ApiParam)({ name: 'id', description: 'ID de la publication à mettre à jour', type: Number }),
+    (0, swagger_1.ApiOperation)({ summary: 'Update a post' }),
+    (0, swagger_1.ApiParam)({
+        name: 'id',
+        description: 'ID of the post to update',
+        type: Number,
+    }),
     (0, swagger_1.ApiBody)({
         type: update_post_dto_1.UpdatePostDto,
         examples: {
             'application/json': {
-                summary: 'Exemple de mise à jour de publication',
+                summary: 'Example of post update',
                 value: {
-                    title: 'Titre mis à jour',
-                    content: 'Contenu mis à jour',
-                    fileUrl: 'http://example.com/imageUpdated.jpg'
-                }
-            }
-        }
+                    title: 'Updated title',
+                    content: 'Updated content',
+                    fileUrl: 'http://example.com/imageUpdated.jpg',
+                },
+            },
+        },
     }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Publication mise à jour avec succès.',
+        description: 'Post successfully updated.',
         type: post_entity_1.Publication,
         examples: {
             'application/json': {
-                summary: 'Publication mise à jour',
+                summary: 'Updated post',
                 value: {
                     id: 1,
-                    title: 'Titre mis à jour',
-                    content: 'Contenu mis à jour',
+                    title: 'Updated title',
+                    content: 'Updated content',
                     fileUrl: 'http://example.com/imageUpdated.jpg',
                     userId: 1,
                     createdAt: '2024-12-03T12:00:00',
-                    updatedAt: '2024-12-03T14:00:00'
-                }
-            }
-        }
+                    updatedAt: '2024-12-03T14:00:00',
+                },
+            },
+        },
     }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Publication non trouvée.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Post not found.' }),
     __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_post_dto_1.UpdatePostDto]),
+    __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, swagger_1.ApiOperation)({ summary: 'Supprimer une publication' }),
-    (0, swagger_1.ApiParam)({ name: 'id', description: 'ID de la publication à supprimer', type: Number }),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete a post' }),
+    (0, swagger_1.ApiParam)({
+        name: 'id',
+        description: 'ID of the post to delete',
+        type: Number,
+    }),
     (0, swagger_1.ApiResponse)({
         status: 200,
-        description: 'Publication supprimée avec succès.',
+        description: 'Post successfully deleted.',
     }),
-    (0, swagger_1.ApiResponse)({ status: 404, description: 'Publication non trouvée.' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'Post not found.' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -183,6 +206,7 @@ __decorate([
 exports.PostController = PostController = __decorate([
     (0, swagger_1.ApiTags)('Posts'),
     (0, common_1.Controller)('api/posts'),
-    __metadata("design:paramtypes", [post_service_1.PostService])
+    __metadata("design:paramtypes", [post_service_1.PostService,
+        blob_service_1.BlobService])
 ], PostController);
 //# sourceMappingURL=post.controller.js.map

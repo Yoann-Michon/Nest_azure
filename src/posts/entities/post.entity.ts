@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import { User } from './../../users/entities/user.entity'; // Relation avec l'entité User
+import { User } from './../../users/entities/user.entity';
 
 @Entity('posts')
 export class Publication {
