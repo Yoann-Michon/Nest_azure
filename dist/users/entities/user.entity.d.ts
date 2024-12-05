@@ -1,5 +1,5 @@
 import { Publication } from '../../posts/entities/post.entity';
-import { Token } from 'src/auth/entities/token.entity';
+import { Token } from '../../token/entities/token.entity';
 export declare class User {
     id: number;
     name: string;

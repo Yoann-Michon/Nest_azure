@@ -18,7 +18,7 @@ const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const user_entity_1 = require("./entities/user.entity");
 const swagger_1 = require("@nestjs/swagger");
-const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
+const jwt_auth_guard_1 = require("./../auth/guards/jwt-auth.guard");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -121,7 +121,6 @@ __decorate([
             },
         },
     }),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
@@ -181,6 +180,7 @@ __decorate([
 ], UsersController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiBearerAuth)('Authorization'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a user' }),
     (0, swagger_1.ApiParam)({
         name: 'id',
@@ -226,6 +226,7 @@ __decorate([
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'User not found.' }),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, swagger_1.ApiBearerAuth)('Authorization'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -245,6 +246,7 @@ __decorate([
         description: 'User successfully deleted.',
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'User not found.' }),
+    (0, swagger_1.ApiBearerAuth)('Authorization'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

@@ -14,12 +14,17 @@ async function bootstrap() {
         allowedHeaders: ['Origin', 'X-Requested-With', 'Content', 'Accept', 'Content-Type', 'Authorization'],
         credentials: true,
     });
-    const reflector = app.get(core_1.Reflector);
-    app.useGlobalGuards(new jwt_auth_guard_1.JwtAuthGuard(reflector));
+    const jwtAuthGuard = app.get(jwt_auth_guard_1.JwtAuthGuard);
+    app.useGlobalGuards(jwtAuthGuard);
     const config = new swagger_1.DocumentBuilder()
         .setTitle('Link Up')
         .setDescription('Documentation de l\'API')
         .setVersion('1.0')
+        .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+    }, 'Authorization')
         .build();
     const document = swagger_1.SwaggerModule.createDocument(app, config);
     swagger_1.SwaggerModule.setup('api/docs', app, document);

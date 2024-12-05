@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './../auth.service';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { User } from './../../users/entities/user.entity';
+import { UsersService } from './../../users/users.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()

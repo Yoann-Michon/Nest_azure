@@ -1,5 +1,5 @@
 import { Strategy } from 'passport-local';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from './../../users/users.service';
 import { AuthService } from '../auth.service';
 declare const LocalStrategy_base: new (...args: any[]) => Strategy;
 export declare class LocalStrategy extends LocalStrategy_base {

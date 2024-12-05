@@ -16,6 +16,7 @@ const users_module_1 = require("./users/users.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
 const blob_module_1 = require("./blob/blob.module");
+const token_module_1 = require("./token/token.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -46,6 +47,7 @@ exports.AppModule = AppModule = __decorate([
                 inject: [config_1.ConfigService],
             }),
             blob_module_1.BlobModule,
+            token_module_1.TokenModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

@@ -7,6 +7,7 @@ import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { BlobModule } from './blob/blob.module';
+import { TokenModule } from './token/token.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { BlobModule } from './blob/blob.module';
       inject: [ConfigService],
     }),
     BlobModule,
+    TokenModule,
   ],
   controllers: [AppController],
   providers: [AppService],

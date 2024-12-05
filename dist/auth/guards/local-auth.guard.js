@@ -13,7 +13,7 @@ exports.LocalAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const auth_service_1 = require("./../auth.service");
-const users_service_1 = require("../../users/users.service");
+const users_service_1 = require("./../../users/users.service");
 const bcrypt = require("bcrypt");
 let LocalAuthGuard = class LocalAuthGuard extends (0, passport_1.AuthGuard)('local') {
     constructor(authService, userService) {

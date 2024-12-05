@@ -17,15 +17,16 @@ import {
   ApiBody,
   ApiParam,
   ApiConsumes,
+  ApiBearerAuth,
 } from '@nestjs/swagger';
 import { PostService } from './post.service';
 import { Publication } from './entities/post.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CreatePostDto } from './dto/create-post.dto';
-import { BlobService } from 'src/blob/blob.service';
+import { BlobService } from './../blob/blob.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { Public } from 'src/auth/guards/public.decorator';
+import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
+import { Public } from './../auth/guards/public.decorator';
 
 @ApiTags('Posts')
 @Controller('api/posts')
@@ -36,68 +37,71 @@ export class PostController {
   ) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new post' })
-  @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        title: { type: 'string', maxLength: 255 },
-        content: { type: 'string' },
-        file: {
-          type: 'string',
-          format: 'binary',
-          nullable: true,
-        },
+@ApiOperation({ summary: 'Create a new post' })
+@ApiConsumes('multipart/form-data')
+@ApiBearerAuth('Authorization')
+@ApiBody({
+  schema: {
+    type: 'object',
+    properties: {
+      title: { type: 'string', maxLength: 255 },
+      content: { type: 'string' },
+      file: {
+        type: 'string',
+        format: 'binary',
+        nullable: true,
       },
     },
-    examples: {
-      'multipart/form-data': {
-        summary: 'Example of file upload',
-        value: {
-          title: 'Post title',
-          content: 'Post content',
-          file: '(Select a file here)',
-        },
+  },
+  examples: {
+    'multipart/form-data': {
+      summary: 'Example of file upload',
+      value: {
+        title: 'Post title',
+        content: 'Post content',
+        file: '(Select a file here)',
       },
     },
-  })
-  @ApiResponse({
-    status: 201,
-    description: 'Post successfully created.',
-    type: Publication,
-    examples: {
-      'application/json': {
-        summary: 'Created post',
-        value: {
-          id: 1,
-          title: 'Post title',
-          content: 'Post content',
-          fileUrl: 'http://example.com/image.jpg',
-          createdAt: '2024-12-03T12:00:00',
-          updatedAt: '2024-12-03T12:00:00',
-        },
+  },
+})
+@ApiResponse({
+  status: 201,
+  description: 'Post successfully created.',
+  type: Publication,
+  examples: {
+    'application/json': {
+      summary: 'Created post',
+      value: {
+        id: 1,
+        title: 'Post title',
+        content: 'Post content',
+        fileUrl: 'http://example.com/image.jpg',
+        createdAt: '2024-12-03T12:00:00',
+        updatedAt: '2024-12-03T12:00:00',
       },
     },
-  })
-  @ApiResponse({ status: 400, description: 'Invalid request.' })
-  @UseInterceptors(FileInterceptor('file'))
-  @UseGuards(JwtAuthGuard)
-  async create(
-    @Body() createPostDto: CreatePostDto,
-    @UploadedFile() file: Express.Multer.File,
-  ): Promise<Publication> {
-    let fileUrl: string | null = null;
+  },
+})
+@ApiResponse({ status: 400, description: 'Invalid request.' })
+@ApiResponse({ status: 500, description: 'Internal server error.' })
+@UseInterceptors(FileInterceptor('file'))
+@UseGuards(JwtAuthGuard)
+async create(
+  @Body() createPostDto: CreatePostDto,
+  @UploadedFile() file: Express.Multer.File,
+): Promise<Publication> {
+  let fileUrl: string | null = null;
 
-    if (file) {
-      fileUrl = await this.blobService.uploadFile(file);
-    }
-
-    return await this.postService.create({
-      ...createPostDto,
-      fileUrl,
-    });
+  if (file) {
+    fileUrl = await this.blobService.uploadFile(file);
   }
+
+  return await this.postService.create({
+    ...createPostDto,
+    fileUrl,
+  });
+}
+
 
   @Public()
   @Get()
@@ -138,6 +142,7 @@ export class PostController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update a post' })
+  @ApiBearerAuth('Authorization')
   @ApiParam({
     name: 'id',
     description: 'ID of the post to update',
@@ -185,6 +190,7 @@ export class PostController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth('Authorization')
   @ApiOperation({ summary: 'Delete a post' })
   @ApiParam({
     name: 'id',

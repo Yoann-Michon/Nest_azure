@@ -1,5 +1,5 @@
 import { AuthService } from './../auth.service';
-import { UsersService } from 'src/users/users.service';
+import { UsersService } from './../../users/users.service';
 declare const LocalAuthGuard_base: import("@nestjs/passport").Type<import("@nestjs/passport").IAuthGuard>;
 export declare class LocalAuthGuard extends LocalAuthGuard_base {
     private authService;

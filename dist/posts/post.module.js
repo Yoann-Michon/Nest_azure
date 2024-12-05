@@ -13,15 +13,15 @@ const post_controller_1 = require("./post.controller");
 const typeorm_1 = require("@nestjs/typeorm");
 const post_entity_1 = require("./entities/post.entity");
 const blob_module_1 = require("./../blob/blob.module");
+const token_module_1 = require("./../token/token.module");
 let PostModule = class PostModule {
 };
 exports.PostModule = PostModule;
 exports.PostModule = PostModule = __decorate([
     (0, common_1.Module)({
-        imports: [typeorm_1.TypeOrmModule.forFeature([post_entity_1.Publication]), blob_module_1.BlobModule],
+        imports: [typeorm_1.TypeOrmModule.forFeature([post_entity_1.Publication]), blob_module_1.BlobModule, token_module_1.TokenModule],
         controllers: [post_controller_1.PostController],
-        providers: [post_service_1.PostService,
-        ],
+        providers: [post_service_1.PostService],
         exports: [post_service_1.PostService]
     })
 ], PostModule);

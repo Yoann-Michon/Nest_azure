@@ -2,7 +2,7 @@ import { PostService } from './post.service';
 import { Publication } from './entities/post.entity';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { CreatePostDto } from './dto/create-post.dto';
-import { BlobService } from 'src/blob/blob.service';
+import { BlobService } from './../blob/blob.service';
 export declare class PostController {
     private readonly postService;
     private readonly blobService;

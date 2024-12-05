@@ -14,7 +14,7 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("../users/users.service");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = require("bcryptjs");
-const token_service_1 = require("./token.service");
+const token_service_1 = require("../token/token.service");
 let AuthService = class AuthService {
     constructor(usersService, jwtService, tokenService) {
         this.usersService = usersService;
@@ -39,7 +39,6 @@ let AuthService = class AuthService {
             };
         }
         catch (error) {
-            console.error("Error during login:", error);
             throw new Error("An error occurred while generating the token.");
         }
     }

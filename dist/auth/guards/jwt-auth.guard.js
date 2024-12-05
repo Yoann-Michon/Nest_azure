@@ -13,21 +13,37 @@ exports.JwtAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const core_1 = require("@nestjs/core");
 const passport_1 = require("@nestjs/passport");
+const token_service_1 = require("../../token/token.service");
 let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
-    constructor(reflector) {
+    constructor(reflector, tokenService) {
         super();
         this.reflector = reflector;
+        this.tokenService = tokenService;
     }
-    canActivate(context) {
+    async canActivate(context) {
         const isPublic = this.reflector.get('isPublic', context.getHandler());
         if (isPublic) {
             return true;
+        }
+        const request = context.switchToHttp().getRequest();
+        const token = request.headers.authorization?.split(' ')[1];
+        if (token) {
+            const isValid = await this.tokenService.isTokenValid(token);
+            if (!isValid) {
+                throw new common_1.UnauthorizedException('Invalid or expired token');
+            }
+        }
+        else {
+            throw new common_1.UnauthorizedException('Token not found');
         }
         return super.canActivate(context);
     }
     handleRequest(err, user) {
         if (err || !user) {
-            throw err || new common_1.UnauthorizedException();
+            throw new common_1.UnauthorizedException('Authentication failed');
+        }
+        if (!user.isActive) {
+            throw new common_1.UnauthorizedException('User account is inactive');
         }
         return user;
     }
@@ -35,6 +51,7 @@ let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
 exports.JwtAuthGuard = JwtAuthGuard;
 exports.JwtAuthGuard = JwtAuthGuard = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [core_1.Reflector])
+    __metadata("design:paramtypes", [core_1.Reflector,
+        token_service_1.TokenService])
 ], JwtAuthGuard);
 //# sourceMappingURL=jwt-auth.guard.js.map

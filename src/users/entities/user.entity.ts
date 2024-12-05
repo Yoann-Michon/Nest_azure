@@ -1,6 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Publication } from '../../posts/entities/post.entity';
-import { Token } from 'src/auth/entities/token.entity';
+import { Token } from '../../token/entities/token.entity';
 
 @Entity('Users')
 export class User {

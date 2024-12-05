@@ -19,10 +19,10 @@ const post_service_1 = require("./post.service");
 const post_entity_1 = require("./entities/post.entity");
 const update_post_dto_1 = require("./dto/update-post.dto");
 const create_post_dto_1 = require("./dto/create-post.dto");
-const blob_service_1 = require("../blob/blob.service");
+const blob_service_1 = require("./../blob/blob.service");
 const platform_express_1 = require("@nestjs/platform-express");
-const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
-const public_decorator_1 = require("../auth/guards/public.decorator");
+const jwt_auth_guard_1 = require("./../auth/guards/jwt-auth.guard");
+const public_decorator_1 = require("./../auth/guards/public.decorator");
 let PostController = class PostController {
     constructor(postService, blobService) {
         this.postService = postService;
@@ -53,6 +53,7 @@ __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new post' }),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
+    (0, swagger_1.ApiBearerAuth)('Authorization'),
     (0, swagger_1.ApiBody)({
         schema: {
             type: 'object',
@@ -96,6 +97,7 @@ __decorate([
         },
     }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid request.' }),
+    (0, swagger_1.ApiResponse)({ status: 500, description: 'Internal server error.' }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
@@ -145,6 +147,7 @@ __decorate([
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiOperation)({ summary: 'Update a post' }),
+    (0, swagger_1.ApiBearerAuth)('Authorization'),
     (0, swagger_1.ApiParam)({
         name: 'id',
         description: 'ID of the post to update',
@@ -192,6 +195,7 @@ __decorate([
 ], PostController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiBearerAuth)('Authorization'),
     (0, swagger_1.ApiOperation)({ summary: 'Delete a post' }),
     (0, swagger_1.ApiParam)({
         name: 'id',

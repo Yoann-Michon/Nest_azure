@@ -7,10 +7,11 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersModule } from '../users/users.module';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { LocalStrategy } from './strategies/local.strategy';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Token } from './entities/token.entity';
-import { TokenService } from './token.service';
+import { Token } from '../token/entities/token.entity';
+import { TokenService } from '../token/token.service';
 import * as dotenv from 'dotenv';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { TokenModule } from '../token/token.module';
 dotenv.config();
 
 
@@ -18,13 +19,14 @@ dotenv.config();
   imports: [
     UsersModule,
     PassportModule,
-    TypeOrmModule.forFeature([Token]),
+    TokenModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET, 
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [AuthService, JwtStrategy, LocalStrategy, LocalAuthGuard,TokenService],
+  providers: [AuthService, JwtStrategy, LocalStrategy, LocalAuthGuard, JwtAuthGuard],
   controllers: [AuthController],
+  exports: [AuthService]
 })
 export class AuthModule {}

@@ -11,8 +11,8 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-import { ApiOperation, ApiBody, ApiResponse, ApiParam, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { ApiOperation, ApiBody, ApiResponse, ApiParam, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
 
 @ApiTags('Users')
 @Controller('api/users')
@@ -97,7 +97,6 @@ export class UsersController {
       },
     },
   })
-  @UseGuards(JwtAuthGuard)
   async findAll() {
     return await this.usersService.findAll();
   }
@@ -154,6 +153,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @ApiBearerAuth('Authorization')
   @ApiOperation({ summary: 'Update a user' })
   @ApiParam({
     name: 'id',
@@ -199,6 +199,7 @@ export class UsersController {
   })
   @ApiResponse({ status: 404, description: 'User not found.' })
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth('Authorization')
   async update(@Param('id') id: string, @Body() userDto: Partial<CreateUserDto>) {
     return await this.usersService.update(+id, userDto);
   }
@@ -215,6 +216,7 @@ export class UsersController {
     description: 'User successfully deleted.',
   })
   @ApiResponse({ status: 404, description: 'User not found.' })
+  @ApiBearerAuth('Authorization')
   @UseGuards(JwtAuthGuard)
   async remove(@Param('id') id: string) {
     return await this.usersService.remove(+id);

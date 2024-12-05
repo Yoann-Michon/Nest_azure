@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
 const post_entity_1 = require("../../posts/entities/post.entity");
-const token_entity_1 = require("../../auth/entities/token.entity");
+const token_entity_1 = require("../../token/entities/token.entity");
 let User = class User {
 };
 exports.User = User;
