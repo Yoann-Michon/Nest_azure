@@ -13,6 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { ApiOperation, ApiBody, ApiResponse, ApiParam, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from './../auth/guards/jwt-auth.guard';
+import { Public } from './../auth/guards/public.decorator';
 
 @ApiTags('Users')
 @Controller('api/users')
@@ -20,6 +21,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Public()
   @ApiOperation({ summary: 'Create a new user' })
   @ApiBody({
     type: CreateUserDto,
@@ -64,6 +66,7 @@ export class UsersController {
   }
 
   @Get()
+  @Public()
   @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({
     status: 200,
@@ -102,6 +105,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Public()
   @ApiOperation({ summary: 'Retrieve a user by ID' })
   @ApiParam({
     name: 'id',
