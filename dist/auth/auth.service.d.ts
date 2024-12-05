@@ -8,8 +8,8 @@ export declare class AuthService {
     private tokenService;
     constructor(usersService: UsersService, jwtService: JwtService, tokenService: TokenService);
     validateUser(username: string, pass: string): Promise<any>;
-    login(user: any): Promise<{
-        access_token: string;
+    login(user: User): Promise<{
+        token: string;
     }>;
     register(user: Partial<User>): Promise<User>;
 }

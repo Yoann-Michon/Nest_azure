@@ -18,6 +18,7 @@ const auth_service_1 = require("./auth.service");
 const local_auth_guard_1 = require("./guards/local-auth.guard");
 const create_user_dto_1 = require("../users/dto/create-user.dto");
 const swagger_1 = require("@nestjs/swagger");
+const public_decorator_1 = require("./guards/public.decorator");
 let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
@@ -32,6 +33,7 @@ let AuthController = class AuthController {
 exports.AuthController = AuthController;
 __decorate([
     (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
+    (0, public_decorator_1.Public)(),
     (0, common_1.Post)('login'),
     (0, swagger_1.ApiOperation)({ summary: 'User login' }),
     (0, swagger_1.ApiResponse)({
@@ -60,6 +62,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
+    (0, public_decorator_1.Public)(),
     (0, swagger_1.ApiOperation)({ summary: 'Register a new user' }),
     (0, swagger_1.ApiResponse)({ status: 201, description: 'User successfully created.' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid data provided.' }),

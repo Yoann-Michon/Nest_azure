@@ -4,6 +4,6 @@ export declare class CreateUserDto {
     username: string;
     password: string;
     age: number;
-    description?: string;
+    description: string;
     profilPublic: boolean;
 }

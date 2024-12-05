@@ -19,6 +19,8 @@ const local_strategy_1 = require("./strategies/local.strategy");
 const typeorm_1 = require("@nestjs/typeorm");
 const token_entity_1 = require("./entities/token.entity");
 const token_service_1 = require("./token.service");
+const dotenv = require("dotenv");
+dotenv.config();
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;

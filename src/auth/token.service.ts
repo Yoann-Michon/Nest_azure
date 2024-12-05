@@ -12,16 +12,43 @@ export class TokenService {
   ) {}
 
   async saveToken(token: string, user: User): Promise<Token> {
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 1); 
-
-    const newToken = this.tokenRepository.create({
-      token,
-      user, 
-      expiresAt,
-    });
-
-    return this.tokenRepository.save(newToken);
+    try {  
+      const expiresAt = new Date();
+      expiresAt.setHours(expiresAt.getHours() + 1);
+  
+      const existingToken = await this.tokenRepository.findOne({ 
+        where: { user: { id: user.id } }
+      });
+  
+      if (existingToken) {
+        return await this.tokenRepository.save({
+          ...existingToken,
+          token: token,
+          expiresAt: expiresAt
+        });
+      } else {
+        const newToken = this.tokenRepository.create({
+          token,
+          user: { id: user.id },
+          expiresAt
+        });
+  
+        return await this.tokenRepository.save(newToken);
+      }
+    } catch (error) {
+      console.error('Token save/update error:', {
+        errorName: error.name,
+        errorMessage: error.message,
+        errorStack: error.stack,
+        userData: { 
+          id: user?.id, 
+          username: user?.username 
+        },
+        tokenLength: token.length
+      });
+      
+      throw new Error(`Failed to save or update token: ${error.message}`);
+    }
   }
   
   async isTokenValid(token: string): Promise<boolean> {

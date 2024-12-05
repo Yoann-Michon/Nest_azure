@@ -10,6 +10,9 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Token } from './entities/token.entity';
 import { TokenService } from './token.service';
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 
 @Module({
   imports: [

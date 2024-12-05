@@ -22,14 +22,18 @@ export class AuthService {
     return null;
   }
 
-  async login(user: any):Promise<{ access_token: string }>{
-    const payload = { username: user.username, sub: user.id};
-    const accessToken = this.jwtService.sign(payload);
-    await this.tokenService.saveToken(accessToken, user)
+  async login(user: User): Promise<{ token: string }> {
+    try {
+      const payload = { username: user.username, sub: user.id };
+      const accessToken = this.jwtService.sign(payload);
+      await this.tokenService.saveToken(accessToken, user);
 
-    return {
-      access_token: accessToken,
-    };
+      return {
+        token: accessToken,
+      };
+    } catch (error) {
+      throw new Error("An error occurred while generating the token.");
+    }
   }
 
   async register(user: Partial<User>): Promise<User> {

@@ -21,6 +21,8 @@ const update_post_dto_1 = require("./dto/update-post.dto");
 const create_post_dto_1 = require("./dto/create-post.dto");
 const blob_service_1 = require("../blob/blob.service");
 const platform_express_1 = require("@nestjs/platform-express");
+const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
+const public_decorator_1 = require("../auth/guards/public.decorator");
 let PostController = class PostController {
     constructor(postService, blobService) {
         this.postService = postService;
@@ -95,6 +97,7 @@ __decorate([
     }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid request.' }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
@@ -102,6 +105,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "create", null);
 __decorate([
+    (0, public_decorator_1.Public)(),
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'Retrieve all posts' }),
     (0, swagger_1.ApiResponse)({
@@ -179,6 +183,7 @@ __decorate([
         },
     }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Post not found.' }),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -197,6 +202,7 @@ __decorate([
         status: 200,
         description: 'Post successfully deleted.',
     }),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'Post not found.' }),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),

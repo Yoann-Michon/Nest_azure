@@ -15,10 +15,12 @@ const passport_local_1 = require("passport-local");
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("../../users/users.service");
 const bcrypt = require("bcrypt");
+const auth_service_1 = require("../auth.service");
 let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)(passport_local_1.Strategy) {
-    constructor(userService) {
+    constructor(userService, authService) {
         super();
         this.userService = userService;
+        this.authService = authService;
     }
     async validate(username, password) {
         const user = await this.userService.findOne(username);
@@ -26,7 +28,9 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
             throw new common_1.UnauthorizedException();
         }
         if (await bcrypt.compare(password, user.password)) {
-            return user;
+            const token = await this.authService.login(user);
+            console.log(token);
+            return token;
         }
         else {
             throw new common_1.UnauthorizedException();
@@ -36,6 +40,7 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
 exports.LocalStrategy = LocalStrategy;
 exports.LocalStrategy = LocalStrategy = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [users_service_1.UsersService])
+    __metadata("design:paramtypes", [users_service_1.UsersService,
+        auth_service_1.AuthService])
 ], LocalStrategy);
 //# sourceMappingURL=local.strategy.js.map

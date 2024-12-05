@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsBoolean, IsInt } from 'class-validator';
+import { IsString, IsOptional, IsBoolean, IsInt, IsNotEmpty } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -18,7 +18,8 @@ export class CreateUserDto {
 
   @IsString()
   @IsOptional()
-  description?: string;
+  @IsNotEmpty()
+  description: string;
 
   @IsBoolean()
   profilPublic: boolean;

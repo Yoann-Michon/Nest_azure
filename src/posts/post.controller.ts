@@ -8,6 +8,7 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -23,6 +24,8 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { CreatePostDto } from './dto/create-post.dto';
 import { BlobService } from 'src/blob/blob.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Public } from 'src/auth/guards/public.decorator';
 
 @ApiTags('Posts')
 @Controller('api/posts')
@@ -79,6 +82,7 @@ export class PostController {
   })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
   @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(JwtAuthGuard)
   async create(
     @Body() createPostDto: CreatePostDto,
     @UploadedFile() file: Express.Multer.File,
@@ -95,6 +99,7 @@ export class PostController {
     });
   }
 
+  @Public()
   @Get()
   @ApiOperation({ summary: 'Retrieve all posts' })
   @ApiResponse({
@@ -171,6 +176,7 @@ export class PostController {
     },
   })
   @ApiResponse({ status: 404, description: 'Post not found.' })
+  @UseGuards(JwtAuthGuard)
   async update(
     @Param('id') id: number,
     @Body() updateBlogDto: Partial<UpdatePostDto>,
@@ -189,6 +195,7 @@ export class PostController {
     status: 200,
     description: 'Post successfully deleted.',
   })
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({ status: 404, description: 'Post not found.' })
   async remove(@Param('id') id: string) {
     return await this.postService.remove(+id);

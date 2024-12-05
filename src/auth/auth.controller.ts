@@ -14,6 +14,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Public } from './guards/public.decorator';
 
 @ApiTags('Authentification')
 @Controller('api/auth')
@@ -21,6 +22,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @UseGuards(LocalAuthGuard)
+  @Public()
   @Post('login')
   @ApiOperation({ summary: 'User login' })
   @ApiResponse({
@@ -46,7 +48,7 @@ export class AuthController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
-
+  @Public()
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, description: 'User successfully created.' })
   @ApiResponse({ status: 400, description: 'Invalid data provided.' })

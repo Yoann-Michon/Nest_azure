@@ -30,12 +30,18 @@ let AuthService = class AuthService {
         return null;
     }
     async login(user) {
-        const payload = { username: user.username, sub: user.id };
-        const accessToken = this.jwtService.sign(payload);
-        await this.tokenService.saveToken(accessToken, user);
-        return {
-            access_token: accessToken,
-        };
+        try {
+            const payload = { username: user.username, sub: user.id };
+            const accessToken = this.jwtService.sign(payload);
+            await this.tokenService.saveToken(accessToken, user);
+            return {
+                token: accessToken,
+            };
+        }
+        catch (error) {
+            console.error("Error during login:", error);
+            throw new Error("An error occurred while generating the token.");
+        }
     }
     async register(user) {
         return this.usersService.create(user);

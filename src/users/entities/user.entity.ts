@@ -16,13 +16,13 @@ export class User {
   @Column()
   username: string;
 
-  @Column({select: false})
+  @Column()
   password: string;
 
   @Column()
   age: number;
 
-  @Column({ type: 'text', default:"No description"})
+  @Column({ type: 'text', default:"", nullable: false})
   description: string;
 
   @Column({ default: true , select: false})

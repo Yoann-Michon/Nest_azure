@@ -15,7 +15,6 @@ const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const typeorm_1 = require("@nestjs/typeorm");
 const config_1 = require("@nestjs/config");
-const jwt_1 = require("@nestjs/jwt");
 const blob_module_1 = require("./blob/blob.module");
 let AppModule = class AppModule {
 };
@@ -27,10 +26,6 @@ exports.AppModule = AppModule = __decorate([
             auth_module_1.AuthModule,
             users_module_1.UsersModule,
             config_1.ConfigModule.forRoot({ isGlobal: true }),
-            jwt_1.JwtModule.register({
-                secret: process.env.JWT_SECRET,
-                signOptions: { expiresIn: '1h' },
-            }),
             typeorm_1.TypeOrmModule.forRootAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: async (configService) => ({

@@ -13,22 +13,32 @@ exports.LocalAuthGuard = void 0;
 const common_1 = require("@nestjs/common");
 const passport_1 = require("@nestjs/passport");
 const auth_service_1 = require("./../auth.service");
+const users_service_1 = require("../../users/users.service");
+const bcrypt = require("bcrypt");
 let LocalAuthGuard = class LocalAuthGuard extends (0, passport_1.AuthGuard)('local') {
-    constructor(authService) {
+    constructor(authService, userService) {
         super();
         this.authService = authService;
+        this.userService = userService;
     }
     async validate(username, password) {
-        const user = await this.authService.validateUser(username, password);
+        const user = await this.userService.findOne(username);
         if (!user) {
-            throw new common_1.UnauthorizedException();
+            throw new common_1.UnauthorizedException('User not found');
         }
-        return user;
+        if (await bcrypt.compare(password, user.password)) {
+            const token = await this.authService.login(user);
+            return token;
+        }
+        else {
+            throw new common_1.UnauthorizedException('Invalid credentials');
+        }
     }
 };
 exports.LocalAuthGuard = LocalAuthGuard;
 exports.LocalAuthGuard = LocalAuthGuard = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [auth_service_1.AuthService])
+    __metadata("design:paramtypes", [auth_service_1.AuthService,
+        users_service_1.UsersService])
 ], LocalAuthGuard);
 //# sourceMappingURL=local-auth.guard.js.map
