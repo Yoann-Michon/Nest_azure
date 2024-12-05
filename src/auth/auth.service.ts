@@ -7,6 +7,7 @@ import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
+  [x: string]: any;
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
@@ -25,18 +26,30 @@ export class AuthService {
   async login(user: User): Promise<{ token: string }> {
     try {
       const payload = { username: user.username, sub: user.id };
-      const accessToken = this.jwtService.sign(payload);
-      await this.tokenService.saveToken(accessToken, user);
+      console.log('Payload:', payload);
 
-      return {
-        token: accessToken,
-      };
+      const accessToken = this.jwtService.sign(payload);
+      console.log('Access token generated:', accessToken);
+
+      await this.tokenService.saveToken(accessToken, user);
+      console.log('Token saved successfully.');
+
+      user.isActive = true;
+      await this.usersService.update(user.id, { isActive: true });
+      return { token: accessToken };
     } catch (error) {
-      throw new Error("An error occurred while generating the token.");
+      console.error('Error in AuthService login:', error.message);
+      throw new Error('An error occurred while generating the token.');
     }
   }
 
   async register(user: Partial<User>): Promise<User> {
     return this.usersService.create(user);
   }
+
+  async logout(user: User): Promise<void> {
+    user.isActive = false;
+    await this.userRepository.save(user);
+  }
+  
 }

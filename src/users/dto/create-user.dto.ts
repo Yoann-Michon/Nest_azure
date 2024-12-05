@@ -23,4 +23,7 @@ export class CreateUserDto {
 
   @IsBoolean()
   profilPublic: boolean;
+
+  @IsBoolean()
+  isActive: boolean
 }

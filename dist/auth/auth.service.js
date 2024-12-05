@@ -32,18 +32,26 @@ let AuthService = class AuthService {
     async login(user) {
         try {
             const payload = { username: user.username, sub: user.id };
+            console.log('Payload:', payload);
             const accessToken = this.jwtService.sign(payload);
+            console.log('Access token generated:', accessToken);
             await this.tokenService.saveToken(accessToken, user);
-            return {
-                token: accessToken,
-            };
+            console.log('Token saved successfully.');
+            user.isActive = true;
+            await this.usersService.update(user.id, { isActive: true });
+            return { token: accessToken };
         }
         catch (error) {
-            throw new Error("An error occurred while generating the token.");
+            console.error('Error in AuthService login:', error.message);
+            throw new Error('An error occurred while generating the token.');
         }
     }
     async register(user) {
         return this.usersService.create(user);
+    }
+    async logout(user) {
+        user.isActive = false;
+        await this.userRepository.save(user);
     }
 };
 exports.AuthService = AuthService;

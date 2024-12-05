@@ -8,7 +8,7 @@ import {
   Delete,
   UploadedFile,
   UseInterceptors,
-  UseGuards,
+  UseGuards, Request
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -37,71 +37,75 @@ export class PostController {
   ) {}
 
   @Post()
-@ApiOperation({ summary: 'Create a new post' })
-@ApiConsumes('multipart/form-data')
-@ApiBearerAuth('Authorization')
-@ApiBody({
-  schema: {
-    type: 'object',
-    properties: {
-      title: { type: 'string', maxLength: 255 },
-      content: { type: 'string' },
-      file: {
-        type: 'string',
-        format: 'binary',
-        nullable: true,
+  @ApiOperation({ summary: 'Create a new post' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBearerAuth('Authorization')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        title: { type: 'string', maxLength: 255 },
+        content: { type: 'string' },
+        file: {
+          type: 'string',
+          format: 'binary',
+          nullable: true,
+        },
       },
     },
-  },
-  examples: {
-    'multipart/form-data': {
-      summary: 'Example of file upload',
-      value: {
-        title: 'Post title',
-        content: 'Post content',
-        file: '(Select a file here)',
+    examples: {
+      'multipart/form-data': {
+        summary: 'Example of file upload',
+        value: {
+          title: 'Post title',
+          content: 'Post content',
+          file: '(Select a file here)',
+        },
       },
     },
-  },
-})
-@ApiResponse({
-  status: 201,
-  description: 'Post successfully created.',
-  type: Publication,
-  examples: {
-    'application/json': {
-      summary: 'Created post',
-      value: {
-        id: 1,
-        title: 'Post title',
-        content: 'Post content',
-        fileUrl: 'http://example.com/image.jpg',
-        createdAt: '2024-12-03T12:00:00',
-        updatedAt: '2024-12-03T12:00:00',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Post successfully created.',
+    type: Publication,
+    examples: {
+      'application/json': {
+        summary: 'Created post',
+        value: {
+          id: 1,
+          title: 'Post title',
+          content: 'Post content',
+          fileUrl: 'http://example.com/image.jpg',
+          createdAt: '2024-12-03T12:00:00',
+          updatedAt: '2024-12-03T12:00:00',
+        },
       },
     },
-  },
-})
-@ApiResponse({ status: 400, description: 'Invalid request.' })
-@ApiResponse({ status: 500, description: 'Internal server error.' })
-@UseInterceptors(FileInterceptor('file'))
-@UseGuards(JwtAuthGuard)
-async create(
-  @Body() createPostDto: CreatePostDto,
-  @UploadedFile() file: Express.Multer.File,
-): Promise<Publication> {
-  let fileUrl: string | null = null;
+  })
+  @ApiResponse({ status: 400, description: 'Invalid request.' })
+  @ApiResponse({ status: 500, description: 'Internal server error.' })
+  @UseInterceptors(FileInterceptor('file'))
+  @UseGuards(JwtAuthGuard)
+  async create(
+    @Body() createPostDto: CreatePostDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Request() req
+  ): Promise<Publication> {
+    let fileUrl: string | null = null;
 
-  if (file) {
-    fileUrl = await this.blobService.uploadFile(file);
+    const userId = req.user?.sub;
+    console.log('User from request:', req);
+      if (file) {
+      fileUrl = await this.blobService.uploadFile(file);
+    }
+    
+
+    return await this.postService.create({
+      ...createPostDto,
+      userId,
+      fileUrl,
+    });
   }
-
-  return await this.postService.create({
-    ...createPostDto,
-    fileUrl,
-  });
-}
-
 
   @Public()
   @Get()

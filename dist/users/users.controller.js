@@ -19,6 +19,7 @@ const create_user_dto_1 = require("./dto/create-user.dto");
 const user_entity_1 = require("./entities/user.entity");
 const swagger_1 = require("@nestjs/swagger");
 const jwt_auth_guard_1 = require("./../auth/guards/jwt-auth.guard");
+const public_decorator_1 = require("./../auth/guards/public.decorator");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -42,6 +43,7 @@ let UsersController = class UsersController {
 exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Post)(),
+    (0, public_decorator_1.Public)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new user' }),
     (0, swagger_1.ApiBody)({
         type: create_user_dto_1.CreateUserDto,
@@ -88,6 +90,7 @@ __decorate([
 ], UsersController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
+    (0, public_decorator_1.Public)(),
     (0, swagger_1.ApiOperation)({ summary: 'Retrieve all users' }),
     (0, swagger_1.ApiResponse)({
         status: 200,
@@ -127,6 +130,7 @@ __decorate([
 ], UsersController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(':id'),
+    (0, public_decorator_1.Public)(),
     (0, swagger_1.ApiOperation)({ summary: 'Retrieve a user by ID' }),
     (0, swagger_1.ApiParam)({
         name: 'id',

@@ -11,4 +11,7 @@ export class CreatePostDto {
   @IsString()
   @IsOptional()
   fileUrl?: string;
+
+  @IsInt()
+  userId: number;
 }

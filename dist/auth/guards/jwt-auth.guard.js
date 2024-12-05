@@ -42,9 +42,6 @@ let JwtAuthGuard = class JwtAuthGuard extends (0, passport_1.AuthGuard)('jwt') {
         if (err || !user) {
             throw new common_1.UnauthorizedException('Authentication failed');
         }
-        if (!user.isActive) {
-            throw new common_1.UnauthorizedException('User account is inactive');
-        }
         return user;
     }
 };

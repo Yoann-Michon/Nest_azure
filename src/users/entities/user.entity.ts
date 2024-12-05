@@ -22,6 +22,9 @@ export class User {
   @Column()
   age: number;
 
+  @Column({ default: false })
+  isActive: boolean;
+
   @Column({ type: 'text', default:"", nullable: false})
   description: string;
 

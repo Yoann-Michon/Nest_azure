@@ -28,4 +28,8 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreatePostDto.prototype, "fileUrl", void 0);
+__decorate([
+    (0, class_validator_1.IsInt)(),
+    __metadata("design:type", Number)
+], CreatePostDto.prototype, "userId", void 0);
 //# sourceMappingURL=create-post.dto.js.map

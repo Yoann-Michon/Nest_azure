@@ -6,4 +6,5 @@ export declare class CreateUserDto {
     age: number;
     description: string;
     profilPublic: boolean;
+    isActive: boolean;
 }

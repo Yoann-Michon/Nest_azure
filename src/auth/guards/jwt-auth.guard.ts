@@ -36,10 +36,6 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       throw new UnauthorizedException('Authentication failed');
     }
   
-    if (!user.isActive) {
-      throw new UnauthorizedException('User account is inactive');
-    }
-  
     return user;
   }
   

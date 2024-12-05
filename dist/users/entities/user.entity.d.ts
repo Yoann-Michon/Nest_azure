@@ -7,6 +7,7 @@ export declare class User {
     username: string;
     password: string;
     age: number;
+    isActive: boolean;
     description: string;
     profilPublic: boolean;
     publication: Publication[];

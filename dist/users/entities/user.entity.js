@@ -41,6 +41,10 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "age", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ default: false }),
+    __metadata("design:type", Boolean)
+], User.prototype, "isActive", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'text', default: "", nullable: false }),
     __metadata("design:type", String)
 ], User.prototype, "description", void 0);

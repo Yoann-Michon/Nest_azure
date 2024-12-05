@@ -7,7 +7,7 @@ export declare class PostController {
     private readonly postService;
     private readonly blobService;
     constructor(postService: PostService, blobService: BlobService);
-    create(createPostDto: CreatePostDto, file: Express.Multer.File): Promise<Publication>;
+    create(createPostDto: CreatePostDto, file: Express.Multer.File, req: any): Promise<Publication>;
     findAll(): Promise<Publication[]>;
     update(id: number, updateBlogDto: Partial<UpdatePostDto>): Promise<Publication>;
     remove(id: string): Promise<void>;

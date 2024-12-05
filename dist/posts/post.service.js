@@ -22,7 +22,12 @@ let PostService = class PostService {
         this.postRepository = postRepository;
     }
     async create(createPostDto) {
-        const post = this.postRepository.create(createPostDto);
+        const { userId, fileUrl, ...postData } = createPostDto;
+        const post = this.postRepository.create({
+            ...postData,
+            user: { id: userId },
+            fileUrl,
+        });
         return await this.postRepository.save(post);
     }
     async findAll() {

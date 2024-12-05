@@ -21,7 +21,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     }
     if (await bcrypt.compare(password, user.password)) {
       const token = await this.authService.login(user); 
-      console.log(token);
       
     return token;
     } else {

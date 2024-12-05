@@ -31,10 +31,6 @@ export class BlobService {
     );
 
     this.containerClient = blobServiceClient.getContainerClient(containerName);
-    console.log('Account Name:', storageAccountName);
-console.log('Container Name:', containerName);
-console.log('blobService: ',blobServiceClient );
-console.log('sharedKeyCredential: ',sharedKeyCredential );
 
   }
 
@@ -46,10 +42,8 @@ console.log('sharedKeyCredential: ',sharedKeyCredential );
 
       const fileExtension = path.extname(file.originalname);
       const uniqueFileName = `${folder ? folder + '/' : ''}${uuidv4()}${fileExtension}`;
-      console.log(uniqueFileName);
       
       const blobClient = this.containerClient.getBlockBlobClient(uniqueFileName);
-      console.log(blobClient);
       
       await blobClient.upload(file.buffer, file.buffer.length, {
         blobHTTPHeaders: { blobContentType: file.mimetype },

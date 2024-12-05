@@ -28,13 +28,16 @@ let PostController = class PostController {
         this.postService = postService;
         this.blobService = blobService;
     }
-    async create(createPostDto, file) {
+    async create(createPostDto, file, req) {
         let fileUrl = null;
+        const userId = req.user?.sub;
+        console.log('User from request:', req);
         if (file) {
             fileUrl = await this.blobService.uploadFile(file);
         }
         return await this.postService.create({
             ...createPostDto,
+            userId,
             fileUrl,
         });
     }
@@ -102,8 +105,9 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.UploadedFile)()),
+    __param(2, (0, common_1.Request)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object]),
+    __metadata("design:paramtypes", [create_post_dto_1.CreatePostDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "create", null);
 __decorate([
