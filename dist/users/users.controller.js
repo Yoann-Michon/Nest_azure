@@ -132,7 +132,25 @@ __decorate([
         description: 'ID of the user to retrieve',
         type: Number,
     }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'User found.' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User found.',
+        type: [user_entity_1.User],
+        examples: {
+            'application/json': {
+                summary: 'User',
+                value: [
+                    {
+                        id: 1,
+                        name: 'John',
+                        firstname: 'Doe',
+                        username: 'johndoe',
+                        age: 30,
+                        description: 'Full-stack developer',
+                        profilPublic: true,
+                    },
+                ],
+            },
+        },
+    }),
     (0, swagger_1.ApiResponse)({ status: 404, description: 'User not found.' }),
     (0, swagger_1.ApiResponse)({
         status: 200,

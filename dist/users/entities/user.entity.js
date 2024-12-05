@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Number)
 ], User.prototype, "age", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'text', nullable: true }),
+    (0, typeorm_1.Column)({ type: 'text', default: "No description" }),
     __metadata("design:type", String)
 ], User.prototype, "description", void 0);
 __decorate([
